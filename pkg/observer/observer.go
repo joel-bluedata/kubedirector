@@ -268,3 +268,17 @@ func GetDefaultStorageClass() (*storagev1.StorageClass, error) {
 	}
 	return nil, nil
 }
+
+// GetNamespace fetches the namespace resource with the given name.
+func GetNamespace(
+	namespaceName string,
+) (*corev1.Namespace, error) {
+
+	result := &corev1.Namespace{}
+	err := shared.Get(
+		context.TODO(),
+		types.NamespacedName{Name: namespaceName},
+		result,
+	)
+	return result, err
+}

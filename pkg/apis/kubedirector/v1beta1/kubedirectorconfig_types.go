@@ -20,12 +20,13 @@ import (
 
 // KubeDirectorConfigSpec defines the desired state of KubeDirectorConfig.
 type KubeDirectorConfigSpec struct {
-	StorageClass         *string `json:"defaultStorageClassName,omitempty"`
-	ServiceType          *string `json:"defaultServiceType,omitempty"`
-	NativeSystemdSupport *bool   `json:"nativeSystemdSupport,omitempty"`
-	RequiredSecretPrefix *string `json:"requiredSecretPrefix,omitempty"`
-	ClusterSvcDomainBase *string `json:"clusterSvcDomainBase,omitempty"`
-	DefaultNamingScheme  *string `json:"defaultNamingScheme,omitempty"`
+	StorageClass            *string `json:"defaultStorageClassName,omitempty"`
+	ServiceType             *string `json:"defaultServiceType,omitempty"`
+	NativeSystemdSupport    *bool   `json:"nativeSystemdSupport,omitempty"`
+	RequiredSecretPrefix    *string `json:"requiredSecretPrefix,omitempty"`
+	ClusterSvcDomainBase    *string `json:"clusterSvcDomainBase,omitempty"`
+	DefaultNamingScheme     *string `json:"defaultNamingScheme,omitempty"`
+	KDClusterStateNamespace *string `json:"kdclusterStateNamespace,omitempty"`
 }
 
 // KubeDirectorConfigStatus defines the observed state of KubeDirectorConfig.

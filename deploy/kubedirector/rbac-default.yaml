@@ -21,6 +21,7 @@ rules:
   - ""
   resources:
   - pods
+  - namespaces
   - services
   - services/finalizers
   - endpoints

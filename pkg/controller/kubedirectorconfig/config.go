@@ -170,6 +170,8 @@ func (r *ReconcileKubeDirectorConfig) syncConfig(
 		return nil
 	}
 
+	syncStateNamespace(reqLogger, cr)
+
 	if cr.Status.State == string(configCreating) {
 		cr.Status.State = string(configReady)
 		shared.LogInfo(
@@ -181,6 +183,9 @@ func (r *ReconcileKubeDirectorConfig) syncConfig(
 	}
 
 	shared.AddGlobalConfig(cr)
+
+	cleanupStateNamespace(reqLogger)
+
 	return nil
 }
 
@@ -275,4 +280,40 @@ func (r *ReconcileKubeDirectorConfig) handleFinalizers(
 	shared.EnsureFinalizer(cr)
 
 	return false, nil
+}
+
+// syncStateNamespace creates (or re-labels) the kdcluster state namespace
+// if necessary. This is done BEFORE the shared global config is updated, to
+// make sure the namespace exists before that config advertises it to the
+// kdcluster reconciliation code.
+func syncStateNamespace(
+	reqLogger logr.Logger,
+	cr *kdv1.KubeDirectorConfig,
+) {
+
+	incomingStateNamespace := ""
+	if cr.Spec.KDClusterStateNamespace != nil {
+		incomingStateNamespace = *cr.Spec.KDClusterStateNamespace
+	}
+	if incomingStateNamespace == "" {
+		return
+	}
+	existingNamespace, getErr := observer.GetNamespace(incomingStateNamespace)
+	if getErr == nil {
+		executor.UpdateNamespace(reqLogger, cr, existingNamespace)
+	} else {
+		executor.CreateNamespace(incomingStateNamespace)
+		// XXX TODO log any error
+	}
+}
+
+// cleanupStateNamespace deletes any no-longer-in-use kdcluster state namespace.
+// This is done AFTER the shared global config is updated, to make sure the
+// namespace still exists as long as that config advertises it to the kdcluster
+// reconciliation code.
+func cleanupStateNamespace(
+	reqLogger logr.Logger,
+) {
+
+
 }

@@ -49,6 +49,11 @@ spec:
             defaultNamingScheme:
               type: string
               pattern: '^UID$|^CrNameRole$'
+            kdclusterStateNamespace:
+              type: string
+              minLength: 1
+              maxLength: 63
+              pattern: '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$'
         status:
           type: object
           nullable: true

@@ -36,6 +36,11 @@ const (
 	// HeadlessServiceLabel is a label placed on the statefulset and pods.
 	// Used in a selector on the headless service.
 	HeadlessServiceLabel = shared.KdDomainBase + "/headless"
+	// StateNamespaceLabel identifies a namespace being used by KD for
+	// storing kdcluster state. This namespace can also be in the process of
+	// being cleaned-up, so check the KD config for name of current in-use
+	// namespace.
+	StateNamespaceLabel =  shared.KdDomainBase + "/kdclusterState"
 
 	// ClusterAppAnnotation is an annotation placed on every created
 	// statefulset, pod, and service, with a value of the KubeDirectorApp's

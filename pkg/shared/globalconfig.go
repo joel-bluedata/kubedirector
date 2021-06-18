@@ -39,7 +39,7 @@ func GetRequiredSecretPrefix() string {
 }
 
 // GetNativeSystemdSupport extracts the flag definition from the
-// globalConfig CR data if present, otherwise returns false
+// globalConfig CR data if present, otherwise returns he default (false).
 func GetNativeSystemdSupport() bool {
 
 	globalConfigLock.RLock()
@@ -50,8 +50,8 @@ func GetNativeSystemdSupport() bool {
 	return false
 }
 
-// GetDefaultNamingScheme extracts the flag definition from the
-// globalConfig CR data if present, otherwise returns false
+// GetDefaultNamingScheme extracts the chosen fallback naming scheme from the
+// globalConfig CR data if present, otherwise returns the default ("UID").
 func GetDefaultNamingScheme() string {
 
 	globalConfigLock.RLock()
@@ -62,8 +62,20 @@ func GetDefaultNamingScheme() string {
 	return DefaultNamingScheme
 }
 
+// GetKDClusterStateNamespace extracts the selected namespace from the
+// globalConfig CR data if present, otherwise returns an empty string.
+func GetKDClusterStateNamespace() string {
+
+	globalConfigLock.RLock()
+	defer globalConfigLock.RUnlock()
+	if globalConfig != nil && globalConfig.Spec.KDClusterStateNamespace != nil {
+		return *globalConfig.Spec.KDClusterStateNamespace
+	}
+	return ""
+}
+
 // GetDefaultStorageClass extracts the default storage class from the
-// globalConfig CR data if present, otherwise returns an empty string
+// globalConfig CR data if present, otherwise returns an empty string.
 func GetDefaultStorageClass() string {
 
 	globalConfigLock.RLock()
